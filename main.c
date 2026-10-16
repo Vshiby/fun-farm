@@ -9,7 +9,7 @@ int experience = 0; //типо стаж работы типо смешно, мо
 //два массива для хранения предметьов в интентаре
 
 //сам инвентарь в котоый мы кладем id предметов
-int inventory[10] = { 0, 2, 3, 5, 4, 6, 7, 5, 8, 5 };
+int inventory[10] = { 0, 2, 3, 5, 4, 6, 7, 5, 7, 5 };
 
 //список предметов который в теории можно расширить
 char* itemNames[10] = {
@@ -46,7 +46,7 @@ void workTime()
 	int workTime = readInt();
 	if (workTime > 12)// почему то захотелось ограничить на 12-ти часах можно убрать эту часть кода если захочется
 	{
-		printf("Не стоит так много работать пожалейте себя");
+		printf("Не стоит так много работать, пожалейте себя");
 		return;
 	}
 	if (workTime < 0)
@@ -113,14 +113,52 @@ void dropItem()
 	//вывод инвентаря для удобства
 	Inventory();
 	int slot;
-	printf("Выберите прдемт который хотите выбросить: ");
+	printf("Выберите прдемт который хотите выбросить: \n");
 	slot = readInt();
 	if (slot < 0 || slot > 9) { printf("Неверный номер слота!\n"); return; }
 	inventory[slot] = 0;
 	printf("Предмет безвозвратно выброшен(((\n");
 }
+//функция для перебора инвентаря и поиска предмета в слотах
+void resourceAudit()
+{
+	int id;
+	for (int i = 0; i < 10; i++)
+	{
+		printf("Предмет %d: %s\n", i, itemNames[i]);
+	}
+	printf("Введите ID предмета: \n");
+	id = readInt();
 
+	int count = 0;// сколько раз встретился
+	int slots[10];// сюда будем записывать, в каких слотах лежит
+	int slotCount = 0;// сколько слотов уже записали
 
+	for (int i = 0; i < 10; i++)
+	{
+		if (inventory[i] == id)
+		{
+			count++;
+			slots[slotCount] = i;
+			slotCount++;
+		}
+	}
+
+	if (count == 0)
+	{
+		printf("Предмет с ID %d не найден в инвентаре.\n", id);
+	}
+	else
+	{
+		printf("Предмет %s встречается %d раз(а)\n", itemNames[id], count);
+		printf("Лежит в слотах: ");
+		for (int i = 0; i < slotCount; i++)
+		{
+			printf("%d ", slots[i]);
+		}
+		printf("\n");
+	}
+}
 
 
 // создаем отдельную фукцию для вывода меню(мне так захотелось ;) )
@@ -176,6 +214,7 @@ void main_menu()
 
 		case(6):
 		{
+			resourceAudit();
 			break;
 		}
 
