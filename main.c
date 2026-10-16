@@ -37,6 +37,11 @@ int readInt()
 	while (getchar() != '\n');
 	return value;
 }
+//замена цвета(может понадобиться для красивого оформления)
+void setColor(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 
 //функция которая считает время работы
 void workTime()
@@ -62,10 +67,12 @@ void workTime()
 	{
 		current_day += current_hour / 24;
 		current_hour = current_hour % 24;
-		experience = +workTime;
+		experience += workTime;
 
 	}
-	printf("Текущее время: день %d, время %d:00\n", current_day, current_hour);
+	setColor(10);
+	printf("=== День %d, %02d:00 ===\n", current_day, current_hour);
+	setColor(7);
 
 
 }
@@ -95,10 +102,7 @@ void changeItem()
 	//показываем все доступные предметы
 	for (int i = 0; i < 10; i++)
 	{
-		if (itemNames[i] == 0)
-			printf("Слот %d: пусто\n", i);
-		else
-			printf("Предмет %d: %s\n", i, itemNames[i]);
+		printf("Предмет %d: %s\n", i, itemNames[i]);
 	}
 	printf("Выберите предмет который хотете положить в слот:\n");
 	item = readInt();
@@ -166,7 +170,9 @@ void main_menu()
 {
 	while (1)
 	{
-		printf("Меню \n");
+		setColor(14);
+		printf("====== МЕНЮ ========\n");
+		setColor(7);
 		printf(" [0] Выход \n");
 		printf(" [1] Посмотреть на часы \n");
 		printf(" [2] Промотать время (Поработать) \n");
@@ -179,46 +185,54 @@ void main_menu()
 		{
 		case(0):
 		{
-			return 0;
+			return;
 		}
 
 		case(1):
 		{
+			system("cls");
 			//вроде хочется отдельной функцией а вроде и так сойдет
-			printf("Текущее время: день %d, время %d:00\n", current_day, current_hour);
+			setColor(10);
+			printf("=== День %d, %02d:00 ===\n", current_day, current_hour);
+			setColor(7);
 			break;
 		}
 
 		case(2):
 		{
+			system("cls");
 			workTime();
 			break;
 		}
 		case(3):
 		{
+			system("cls");
 			Inventory();
 			break;
 		}
 
 		case(4):
 		{
+			system("cls");
 			changeItem();
 			break;
 		}
 
 		case(5):
 		{
+			system("cls");
 			dropItem();
 			break;
 		}
 
 		case(6):
 		{
+			system("cls");
 			resourceAudit();
 			break;
 		}
 
-		default: printf("Не вырный пункт меню!\n"); break;
+		default: printf("Не верный пункт меню!\n"); break;
 		}
 
 
@@ -237,6 +251,7 @@ int main()
 	// делаем вывод консили на русском для пользователя
 	SetConsoleCP(65001);
 	SetConsoleOutputCP(65001);
+	SetConsoleTitleA("fun Farm");//немного оформления работе
 	main_menu();
 	//функция main получилась какой то маленькой я не уверен что это норм
 }
