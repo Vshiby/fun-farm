@@ -9,7 +9,7 @@ int experience = 0; //типо стаж работы типо смешно, мо
 //два массива для хранения предметьов в интентаре
 
 //сам инвентарь в котоый мы кладем id предметов
-int inventory[10] = { 1, 2, 3, 5, 0, 8, 0, 5, 0, 5 };
+int inventory[10] = { 0, 2, 3, 5, 4, 6, 7, 5, 8, 5 };
 
 //список предметов который в теории можно расширить
 char* itemNames[10] = {
@@ -25,13 +25,25 @@ char* itemNames[10] = {
 	"Вода"
 };
 
+//добавляем проверку на число, как я понял если он успешно читает то 1 а если не число то -1
+int readInt()
+{
+	int value;
+	if (scanf_s("%d", &value) != 1)
+	{
+		while (getchar() != '\n');
+		return -1;
+	}
+	while (getchar() != '\n');
+	return value;
+}
+
 //функция которая считает время работы
 void workTime()
 {
-	int workTime;
-	printf("Сколько вы хотите поработать:");
-	scanf_s("%d", &workTime);
 
+	printf("Сколько вы хотите поработать:");
+	int workTime = readInt();
 	if (workTime > 12)// почему то захотелось ограничить на 12-ти часах можно убрать эту часть кода если захочется
 	{
 		printf("Не стоит так много работать пожалейте себя");
@@ -58,6 +70,59 @@ void workTime()
 
 }
 
+void Inventory()
+{
+	//просто перебор массива инвентаря, выводит слот инвентаря и предмет в нем
+	for (int i = 0; i < 10; i++)
+	{
+			printf("Слот %d: %s\n", i, itemNames[inventory[i]]);
+
+	}
+
+
+}
+
+
+void changeItem()
+{
+
+	int slot, item;
+	//показываем весь инвентарь
+	Inventory();
+	printf("Выберите слот который хотете заменить:\n");
+	slot = readInt();
+	if (slot < 0 || slot > 9) { printf("Неверный номер слота!\n"); return; }
+	//показываем все доступные предметы
+	for (int i = 0; i < 10; i++)
+	{
+		if (itemNames[i] == 0)
+			printf("Слот %d: пусто\n", i);
+		else
+			printf("Предмет %d: %s\n", i, itemNames[i]);
+	}
+	printf("Выберите предмет который хотете положить в слот:\n");
+	item = readInt();
+	if (item < 0 || item > 9) { printf("Неверный ввод\n"); return; }
+	inventory[slot] = item;
+	printf("В слот %d положен предмет %s\n", slot, itemNames[item]);
+}
+
+
+void dropItem()
+{
+	//вывод инвентаря для удобства
+	Inventory();
+	int slot;
+	printf("Выберите прдемт который хотите выбросить: ");
+	slot = readInt();
+	if (slot < 0 || slot > 9) { printf("Неверный номер слота!\n"); return; }
+	inventory[slot] = 0;
+	printf("Предмет безвозвратно выброшен(((\n");
+}
+
+
+
+
 // создаем отдельную фукцию для вывода меню(мне так захотелось ;) )
 void main_menu()
 {
@@ -71,8 +136,7 @@ void main_menu()
 		printf(" [4] Положить предмет в слот \n");
 		printf(" [5] Выбросить предмет \n");
 		printf(" [6] Ревизия ресурсов \n");
-		int choice;
-		scanf_s("%d", &choice);
+		int choice = readInt();
 		switch (choice)
 		{
 		case(0):
@@ -94,16 +158,19 @@ void main_menu()
 		}
 		case(3):
 		{
+			Inventory();
 			break;
 		}
 
 		case(4):
 		{
+			changeItem();
 			break;
 		}
 
 		case(5):
 		{
+			dropItem();
 			break;
 		}
 
@@ -132,5 +199,5 @@ int main()
 	SetConsoleCP(65001);
 	SetConsoleOutputCP(65001);
 	main_menu();
-
+	//функция main получилась какой то маленькой я не уверен что это норм
 }
